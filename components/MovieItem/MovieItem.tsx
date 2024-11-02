@@ -3,19 +3,40 @@
 import React from "react";
 import Image from "next/image";
 import { Movie } from "@/types/movies";
-import style from "./MovieItem.module.scss";
 import FavoriteIcon from "@/icons/FavoriteIcon";
+import classNames from "classnames/bind";
+
+import style from "./MovieItem.module.scss";
 
 type MovieItemProps = {
   movie: Movie;
+  index: number;
+  isFocused: boolean;
+  setFocusedIndex: (index: number) => void;
 };
 
-const MovieItem = ({ movie }: MovieItemProps) => {
+const setClass = classNames.bind(style);
+
+const MovieItem = ({
+  movie,
+  index,
+  isFocused,
+  setFocusedIndex,
+}: MovieItemProps) => {
   const { original_title, poster_path, release_date } = movie;
 
   return (
-    <div className={style.movieItemWrapper}>
-      <div className={style.cardWrapper}>
+    <div
+      className={style.movieItemWrapper}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        setFocusedIndex(index);
+      }}>
+      <div
+        className={setClass({
+          cardWrapper: true,
+          focused: isFocused,
+        })}>
         <Image
           alt={movie.title}
           className={style.cardImage}
@@ -24,7 +45,11 @@ const MovieItem = ({ movie }: MovieItemProps) => {
           src={`https://image.tmdb.org/t/p/original${poster_path}`}
           priority
         />
-        <div className={style.cardsOverlay}>
+        <div
+          className={setClass({
+            cardsOverlay: true,
+            focused: isFocused,
+          })}>
           <div className={style.cardTitle}>{original_title}</div>
           <div className={style.cardInfo}>
             <span>{release_date}</span>

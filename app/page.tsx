@@ -8,7 +8,7 @@ const Home = async () => {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Movies movies={movies} />
+        <Movies movies={movies} columns={5} />
       </main>
     </div>
   );
