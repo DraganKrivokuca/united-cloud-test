@@ -1,3 +1,5 @@
+import { filterDuplicatedMovies } from "@/lib/filterDuplicatedMovies";
+import { sortMovieByRating } from "@/lib/sortMovieByRating";
 import { Movie } from "@/types/movies";
 
 export const fetchMovies = async (): Promise<Movie[]> => {
@@ -6,15 +8,8 @@ export const fetchMovies = async (): Promise<Movie[]> => {
     throw new Error("Failed to fetch movies");
   }
   const movies: Movie[] = await response.json();
+  const filteredMovies = filterDuplicatedMovies(movies);
+  const sortedMovies = sortMovieByRating(filteredMovies);
 
-  const uniqueMovies = Array.from(
-    new Map(movies.map((movie: Movie) => [movie.id, movie])).values()
-  );
-  uniqueMovies.sort((a, b) => {
-    const ratingA = a.ratings.find((r) => r.id === "imdb")?.rating || 0;
-    const ratingB = b.ratings.find((r) => r.id === "imdb")?.rating || 0;
-    return ratingB - ratingA;
-  });
-
-  return uniqueMovies;
+  return sortedMovies;
 };
