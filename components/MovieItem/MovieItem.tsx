@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Movie } from "@/types/movies";
 import style from "./MovieItem.module.scss";
+import FavoriteIcon from "@/icons/FavoriteIcon";
 
 type MovieItemProps = {
   movie: Movie;
@@ -27,6 +28,11 @@ const MovieItem = ({ movie }: MovieItemProps) => {
           <div className={style.cardTitle}>{original_title}</div>
           <div className={style.cardInfo}>
             <span>{release_date}</span>
+            <div className={style.cardFavorite}>
+              <span>
+                <FavoriteIcon />
+              </span>
+            </div>
           </div>
         </div>
       </div>
