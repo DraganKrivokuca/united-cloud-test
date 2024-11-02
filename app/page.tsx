@@ -1,9 +1,17 @@
+import { fetchMovies } from "@/api/movies";
+import Movies from "@/components/Movies/Movies";
+
 import styles from "./page.module.css";
 
-export default function Home() {
+const Home = async () => {
+  const movies = await fetchMovies();
   return (
     <div className={styles.page}>
-      <main className={styles.main}>content</main>
+      <main className={styles.main}>
+        <Movies movies={movies} />
+      </main>
     </div>
   );
-}
+};
+
+export default Home;
