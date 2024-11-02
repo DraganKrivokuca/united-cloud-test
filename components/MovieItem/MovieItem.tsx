@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { Movie } from "@/types/movies";
 import FavoriteIcon from "@/icons/FavoriteIcon";
@@ -24,10 +24,33 @@ const MovieItem = ({
   setFocusedIndex,
 }: MovieItemProps) => {
   const { original_title, poster_path, release_date } = movie;
+  const itemRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isFocused && itemRef.current) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) {
+            itemRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }
+        },
+        { threshold: 0.2 }
+      );
+      observer.observe(itemRef.current);
+
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [isFocused]);
 
   return (
     <div
       className={style.movieItemWrapper}
+      ref={itemRef}
       onMouseDown={(e) => {
         e.preventDefault();
         setFocusedIndex(index);
