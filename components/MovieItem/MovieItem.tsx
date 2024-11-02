@@ -13,6 +13,9 @@ type MovieItemProps = {
   index: number;
   isFocused: boolean;
   setFocusedIndex: (index: number) => void;
+  updateMovie: (index: number) => void;
+  setIsArrowKeyUsed: (isArrowKeyUsed: boolean) => void;
+  isArrowKeyUsed: boolean;
 };
 
 const setClass = classNames.bind(style);
@@ -22,6 +25,9 @@ const MovieItem = ({
   index,
   isFocused,
   setFocusedIndex,
+  updateMovie,
+  setIsArrowKeyUsed,
+  isArrowKeyUsed,
 }: MovieItemProps) => {
   const { original_title, poster_path, release_date, isFavorite } = movie;
   const itemRef = useRef<HTMLDivElement>(null);
@@ -30,7 +36,7 @@ const MovieItem = ({
     if (isFocused && itemRef.current) {
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (!entry.isIntersecting) {
+          if (!entry.isIntersecting && isArrowKeyUsed) {
             itemRef.current?.scrollIntoView({
               behavior: "smooth",
               block: "center",
@@ -45,7 +51,7 @@ const MovieItem = ({
         observer.disconnect();
       };
     }
-  }, [isFocused]);
+  }, [isFocused, isArrowKeyUsed]);
 
   return (
     <div
@@ -54,12 +60,14 @@ const MovieItem = ({
       onMouseDown={(e) => {
         e.preventDefault();
         setFocusedIndex(index);
+        setIsArrowKeyUsed(false);
       }}>
       <div
         className={setClass({
           cardWrapper: true,
           focused: isFocused,
         })}>
+        {isFavorite && <div className={style.favoriteFlag}>favorite</div>}
         <Image
           alt={movie.title}
           className={style.cardImage}
@@ -77,9 +85,9 @@ const MovieItem = ({
           <div className={style.cardInfo}>
             <span>{release_date}</span>
             <div className={style.cardFavorite}>
-              <span>
+              <button onClick={() => updateMovie(index)}>
                 <FavoriteIcon color={isFavorite ? "#f31260" : "#fff"} />
-              </span>
+              </button>
             </div>
           </div>
         </div>

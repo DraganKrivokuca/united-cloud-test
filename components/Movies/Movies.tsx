@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { moviesAtom } from "@/store/movies";
@@ -16,6 +17,7 @@ type MoviesProps = {
 };
 
 const Movies = ({ initialMovies, columns }: MoviesProps) => {
+  const [isArrowKeyUsed, setIsArrowKeyUsed] = useState(false);
   useHydrateAtoms([[moviesAtom, initialMovies]]);
   const movies = useAtomValue(moviesAtom);
   const setMovie = useSetAtom(moviesAtom);
@@ -37,10 +39,22 @@ const Movies = ({ initialMovies, columns }: MoviesProps) => {
       movies,
       columns,
       updateMovie,
+      setIsArrowKeyUsed,
     });
 
+  useEffect(() => {
+    const handleKeyDownWrapper = (e: KeyboardEvent) => {
+      handleKeyDown(e as unknown as React.KeyboardEvent<HTMLDivElement>);
+    };
+    window.addEventListener("keydown", handleKeyDownWrapper);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDownWrapper);
+    };
+  }, []);
+
   return (
-    <div className={style.moviesWrapper} onKeyDown={handleKeyDown}>
+    <div className={style.moviesWrapper}>
       {movies.map((movie: Movie, index: number) => (
         <MovieItem
           movie={movie}
@@ -48,6 +62,9 @@ const Movies = ({ initialMovies, columns }: MoviesProps) => {
           index={index}
           isFocused={index === focusedIndex}
           setFocusedIndex={setFocusedIndex}
+          updateMovie={updateMovie}
+          setIsArrowKeyUsed={setIsArrowKeyUsed}
+          isArrowKeyUsed={isArrowKeyUsed}
         />
       ))}
     </div>

@@ -50,6 +50,13 @@
         align-items: center;
         justify-content: space-between;
         font-size: 0.75rem;
+        .cardFavorite {
+          button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+          }
+        }
       }
       &:hover {
         opacity: 1;
@@ -67,6 +74,19 @@
         rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
         rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
       border: 0.1rem solid #05e9c8;
+    }
+    .favoriteFlag {
+      position: absolute;
+      bottom: 11.5rem;
+      left: 9.15rem;
+      background-color: #f31260;
+      color: white;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      transform: rotate(45deg);
+      transform-origin: top right;
+      z-index: 20;
     }
   }
 }
