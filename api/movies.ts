@@ -6,5 +6,15 @@ export const fetchMovies = async (): Promise<Movie[]> => {
     throw new Error("Failed to fetch movies");
   }
   const movies: Movie[] = await response.json();
-  return movies;
+
+  const uniqueMovies = Array.from(
+    new Map(movies.map((movie: Movie) => [movie.id, movie])).values()
+  );
+  uniqueMovies.sort((a, b) => {
+    const ratingA = a.ratings.find((r) => r.id === "imdb")?.rating || 0;
+    const ratingB = b.ratings.find((r) => r.id === "imdb")?.rating || 0;
+    return ratingB - ratingA;
+  });
+
+  return uniqueMovies;
 };

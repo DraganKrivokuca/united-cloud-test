@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import MovieItem from "../MovieItem/MovieItem";
 import { Movie } from "@/types/movies";
 
 import style from "./Movies.module.scss";
@@ -10,11 +11,11 @@ type MoviesProps = {
 };
 
 const Movies = ({ movies }: MoviesProps) => {
-  console.log(movies);
-
   return (
     <div className={style.moviesWrapper}>
-      <h1>Movies</h1>
+      {movies.map((movie: Movie) => (
+        <MovieItem movie={movie} key={`${movie.title}-${movie.id}`} />
+      ))}
     </div>
   );
 };
