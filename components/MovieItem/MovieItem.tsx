@@ -23,7 +23,7 @@ const MovieItem = ({
   isFocused,
   setFocusedIndex,
 }: MovieItemProps) => {
-  const { original_title, poster_path, release_date } = movie;
+  const { original_title, poster_path, release_date, isFavorite } = movie;
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const MovieItem = ({
             <span>{release_date}</span>
             <div className={style.cardFavorite}>
               <span>
-                <FavoriteIcon />
+                <FavoriteIcon color={isFavorite ? "#f31260" : "#fff"} />
               </span>
             </div>
           </div>

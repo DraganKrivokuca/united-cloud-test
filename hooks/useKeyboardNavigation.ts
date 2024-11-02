@@ -1,17 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Movie } from "@/types/movies";
 
 type UseKeyboardNavigationProps = {
   movies: Movie[];
   columns: number;
+  updateMovie: (index: number) => void;
 };
 
 const useKeyboardNavigation = ({
   movies,
   columns,
+  updateMovie,
 }: UseKeyboardNavigationProps) => {
   const [focusedIndex, setFocusedIndex] = useState(0);
+  const focusedIndexRef = useRef(focusedIndex);
 
   useEffect(() => {
     const handleKeyDownWrapper = (e: KeyboardEvent) => {
@@ -24,6 +27,10 @@ const useKeyboardNavigation = ({
     };
   }, []);
 
+  useEffect(() => {
+    focusedIndexRef.current = focusedIndex;
+  }, [focusedIndex]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const keyActions: { [key: string]: () => void } = {
       ArrowDown: () =>
@@ -32,7 +39,7 @@ const useKeyboardNavigation = ({
       ArrowRight: () =>
         setFocusedIndex((prev) => Math.min(prev + 1, movies.length - 1)),
       ArrowLeft: () => setFocusedIndex((prev) => Math.max(prev - 1, 0)),
-      Enter: () => console.log("pressed enter"),
+      Enter: () => updateMovie(focusedIndexRef.current),
     };
 
     keyActions[e.key]?.();
