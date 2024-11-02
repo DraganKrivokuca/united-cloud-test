@@ -23,10 +23,11 @@ const Movies = ({ initialMovies, columns }: MoviesProps) => {
   const updateMovie = (index: number) => {
     setMovie((prevState) => {
       const updatedMovies = [...prevState];
-      updatedMovies[index] = {
-        ...updatedMovies[index],
-        isFavorite: true,
-      };
+      if (updatedMovies[index].isFavorite) {
+        updatedMovies.splice(index, 1);
+      } else {
+        updatedMovies[index] = { ...updatedMovies[index], isFavorite: true };
+      }
       return updatedMovies;
     });
   };
